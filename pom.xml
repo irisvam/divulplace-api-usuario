@@ -1,0 +1,164 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>br.com</groupId>
+	<artifactId>divulplace-api-usuario</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>usuario-api</name>
+	<description>Serviços para iniciar os usuários</description>
+
+	<properties>
+		<java.version>1.8</java.version>
+		<springframework.version>5.0.5.RELEASE</springframework.version>
+		<springdata.version>2.1.8.RELEASE</springdata.version>
+		<hibernate.version>5.2.17.Final</hibernate.version>
+		<postgresql.version>42.2.2</postgresql.version>
+		<slf4j.version>1.7.5</slf4j.version>
+		<jackson.version>2.9.9</jackson.version>
+		<junit.version>4.12</junit.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<!-- Spring MVC -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+
+		<!-- Spring DATA -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>${springdata.version}</version>
+		</dependency>
+
+		<!-- Hibernate -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>6.0.9.Final</version>
+		</dependency>
+
+		<!-- PostGreSQL Connector Java dependency (JDBC driver for PostGreSQL): 
+			9.4.1208.jre7 -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>${postgresql.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.mchange</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.5.4</version>
+		</dependency>
+
+		<!-- Servlet -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+
+		<!-- Logggin API -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+
+		<!-- Json -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+
+		<!-- JUnit Test -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>profile-development</id>
+			<properties>
+				<environment>dev</environment>
+				<db.divulplace.url>jdbc:postgresql://localhost:5432/divulplace</db.divulplace.url>
+				<db.divulplace.username>postgres</db.divulplace.username>
+				<db.divulplace.password>123456</db.divulplace.password>
+				<db.divulplace.show_sql>true</db.divulplace.show_sql>
+				<db.divulplace.format_sql>true</db.divulplace.format_sql>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+				<property>
+					<name>environment</name>
+					<value>dev</value>
+				</property>
+			</activation>
+		</profile>
+		<profile>
+			<id>profile-production</id>
+			<properties>
+				<environment>prod</environment>
+				<db.divulplace.url>jdbc:postgresql://170.0.0.1:5432/postgres</db.divulplace.url>
+				<db.divulplace.username>other_user_name</db.divulplace.username>
+				<db.divulplace.password>other_password</db.divulplace.password>
+				<db.divulplace.show_sql>false</db.divulplace.show_sql>
+				<db.divulplace.format_sql>false</db.divulplace.format_sql>
+			</properties>
+			<activation>
+				<property>
+					<name>environment</name>
+					<value>prod</value>
+				</property>
+			</activation>
+		</profile>
+	</profiles>
+
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.2</version>
+					<configuration>
+						<source>${java.version}</source>
+						<target>${java.version}</target>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>2.4</version>
+					<configuration>
+						<warSourceDirectory>src/main/webapp</warSourceDirectory>
+						<warName>usuario-api</warName>
+						<failOnMissingWebXml>false</failOnMissingWebXml>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+	<packaging>war</packaging>
+</project>
