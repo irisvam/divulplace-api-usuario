@@ -20,15 +20,25 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
+/**
+ * Classse de configuração do Hibernate.
+ */
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "br.com.divulplace.usuario.repositories")
-@PropertySource(value = { "classpath:application.properties" })
+@PropertySource(value = {"classpath:application.properties"})
 public class AppConfigHibernate {
 
 	@Autowired
 	private Environment environment;
 
+	/**
+	 * Método na arquitetura {@code Spring} responsável pela criação do {@code @Bean} para Data Source.
+	 *
+	 * @return {@link DataSource} com as informações de conexão.
+	 * @throws IllegalStateException quando coloca uma variável errada
+	 * @throws PropertyVetoException quando colocar um drive class errado
+	 */
 	@Bean
 	public DataSource dataSource() throws IllegalStateException, PropertyVetoException {
 
@@ -45,9 +55,15 @@ public class AppConfigHibernate {
 		return dataSource;
 	}
 
+	/**
+	 * Método na arquitetura {@code Spring} responsável pela criação do {@code @Bean} para o Entity Manager.
+	 *
+	 * @return {@link LocalContainerEntityManagerFactoryBean} com a fábrica de entitys
+	 * @throws IllegalStateException quando coloca uma variável errada
+	 * @throws PropertyVetoException quando coloca uma variável errada
+	 */
 	@Bean
-	public LocalContainerEntityManagerFactoryBean entityManagerFactory()
-			throws IllegalStateException, PropertyVetoException {
+	public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws IllegalStateException, PropertyVetoException {
 
 		final LocalContainerEntityManagerFactoryBean entityManager = new LocalContainerEntityManagerFactoryBean();
 		entityManager.setDataSource(dataSource());
@@ -59,6 +75,11 @@ public class AppConfigHibernate {
 		return entityManager;
 	}
 
+	/**
+	 * Método para preparar o Propertie com as variáveis de ambiente do Hibernate.
+	 *
+	 * @return {@link Properties} com as variáveis de ambiente
+	 */
 	private Properties hibernateProperties() {
 
 		final Properties properties = new Properties();
@@ -71,6 +92,13 @@ public class AppConfigHibernate {
 		return properties;
 	}
 
+	/**
+	 * Método na arquitetura {@code Spring} responsável pela criação do {@code @Bean} para uma {@code Transaction}.
+	 *
+	 * @return {@link JpaTransactionManager} com a transação pronta para sre utilizada
+	 * @throws IllegalStateException quando coloca uma variável errada
+	 * @throws PropertyVetoException quando coloca uma variável errada
+	 */
 	@Bean
 	public JpaTransactionManager transactionManager() throws IllegalStateException, PropertyVetoException {
 
