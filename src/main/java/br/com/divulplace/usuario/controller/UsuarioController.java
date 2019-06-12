@@ -61,7 +61,7 @@ public class UsuarioController {
 		}
 
 		headers.set(MessageProperties.MESSAGE.getDescricao(),
-				sourceMessage.getMessage(MessageProperties.GET_LIST_OK.getDescricao(), new Object[] {"lei"}, locale));
+				sourceMessage.getMessage(MessageProperties.GET_LIST_OK.getDescricao(), new Object[] {"usuario"}, locale));
 
 		return new ResponseEntity<List<Usuario>>(lista, headers, HttpStatus.OK);
 	}
@@ -80,7 +80,7 @@ public class UsuarioController {
 		}
 
 		headers.set(MessageProperties.MESSAGE.getDescricao(),
-				sourceMessage.getMessage(MessageProperties.GET_OK.getDescricao(), new Object[] {"lei"}, locale));
+				sourceMessage.getMessage(MessageProperties.GET_OK.getDescricao(), new Object[] {"usuario"}, locale));
 
 		return new ResponseEntity<Usuario>(usuario, headers, HttpStatus.OK);
 	}
