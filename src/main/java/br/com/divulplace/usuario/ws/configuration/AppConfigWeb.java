@@ -1,4 +1,4 @@
-package br.com.divulplace.usuario.configuration;
+package br.com.divulplace.usuario.ws.configuration;
 
 import java.util.Locale;
 
@@ -17,7 +17,7 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 @Configuration
 @EnableWebMvc
 @EnableSpringDataWebSupport
-@ComponentScan(basePackages = "br.com.divulplace.usuario")
+@ComponentScan(basePackages = "br.com.divulplace.usuario.ws")
 public class AppConfigWeb extends WebMvcConfigurationSupport {
 
 	/**

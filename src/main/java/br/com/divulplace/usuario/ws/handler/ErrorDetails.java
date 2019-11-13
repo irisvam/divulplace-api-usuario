@@ -1,4 +1,4 @@
-package br.com.divulplace.usuario.handler;
+package br.com.divulplace.usuario.ws.handler;
 
 /**
  * Classe padronizada para apresentar o erros na aplicação.

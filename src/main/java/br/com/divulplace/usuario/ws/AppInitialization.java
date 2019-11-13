@@ -1,8 +1,8 @@
-package br.com.divulplace.usuario;
+package br.com.divulplace.usuario.ws;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-import br.com.divulplace.usuario.configuration.AppConfigWeb;
+import br.com.divulplace.usuario.ws.configuration.AppConfigWeb;
 
 /**
  * Classe que {@code extends} a classe {@link AbstractAnnotationConfigDispatcherServletInitializer} para inicialização

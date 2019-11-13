@@ -13,6 +13,8 @@ package br.com.divulplace.usuario.util.enums;
  * @see #PUT_CONFLICT
  * @see #PUT_NOT_FOUND
  * @see #PUT_OK
+ * @see #BAD_REQUEST
+ * @see #POST_BAD_CREDENTIALS
  */
 public enum MessageProperties {
 
@@ -26,7 +28,8 @@ public enum MessageProperties {
 	PUT_CONFLICT 	("controller.put.conflict"),
 	PUT_NOT_FOUND 	("controller.put.not_found"),
 	PUT_OK 			("controller.put.ok"),
-	BAD_REQUEST		("controller.parameter.bad_request");
+	BAD_REQUEST		("controller.parameter.bad_request"),
+	POST_BAD_CREDENTIALS ("controller.post.bad_credencial");
 
 	private final String descricao;
 

@@ -1,4 +1,4 @@
-package br.com.divulplace.usuario.exception;
+package br.com.divulplace.usuario.ws.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

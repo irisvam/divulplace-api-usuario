@@ -1,4 +1,4 @@
-package br.com.divulplace.usuario.configuration;
+package br.com.divulplace.usuario.ws.configuration;
 
 import org.springframework.core.env.Environment;
 
@@ -25,7 +25,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
  */
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = "br.com.divulplace.usuario.repositories")
+@EnableJpaRepositories(basePackages = "br.com.divulplace.usuario.ws.repositories")
 @PropertySource(value = {"classpath:application.properties"})
 public class AppConfigHibernate {
 
@@ -67,7 +67,7 @@ public class AppConfigHibernate {
 
 		final LocalContainerEntityManagerFactoryBean entityManager = new LocalContainerEntityManagerFactoryBean();
 		entityManager.setDataSource(dataSource());
-		entityManager.setPackagesToScan("br.com.divulplace.usuario.model");
+		entityManager.setPackagesToScan("br.com.divulplace.usuario.entity");
 		entityManager.setPersistenceProviderClass(HibernatePersistenceProvider.class);
 		entityManager.setJpaDialect(new HibernateJpaDialect());
 		entityManager.setJpaProperties(hibernateProperties());

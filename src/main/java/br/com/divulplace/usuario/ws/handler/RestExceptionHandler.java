@@ -1,10 +1,18 @@
-package br.com.divulplace.usuario.handler;
+package br.com.divulplace.usuario.ws.handler;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -14,9 +22,10 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import br.com.divulplace.usuario.exception.ParameterNotValidException;
-import br.com.divulplace.usuario.exception.ResourceConflictException;
-import br.com.divulplace.usuario.exception.ResourceNotFoundException;
+import br.com.divulplace.usuario.ws.exception.ParameterNotValidException;
+import br.com.divulplace.usuario.ws.exception.ResourceConflictException;
+import br.com.divulplace.usuario.ws.exception.ResourceNotFoundException;
+import br.com.divulplace.usuario.ws.exception.UnauthorizedException;
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
@@ -49,6 +58,97 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 				.title("Parâmetro não aceitável!").detail(rnfException.getMessage()).devMessage(rnfException.getClass().getName()).build();
 
 		return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+	}
+
+	/**
+	 * Método para tratar os erros de {@code HttpStatus.UNAUTHORIZED}.
+	 *
+	 * @param unauthException um {@link UnauthorizedException} quando enviado com a mensagem de erro
+	 * @return {@link ResponseEntity} com a resposta {@code HTTP}
+	 */
+	@ExceptionHandler(UnauthorizedException.class)
+	public ResponseEntity<?> handlerUnauthotizedException(final UnauthorizedException unauthException) {
+
+		final ErrorDetails errorDetails = ErrorDetails.Builder.newBuilder().timestamp(new Date().getTime()).status(HttpStatus.UNAUTHORIZED.value())
+				.title("Não Autorizado!").detail(unauthException.getMessage()).devMessage(unauthException.getClass().getName()).build();
+
+		return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
+	}
+
+	/**
+	 * Método para tratar dos erros de {@code HttpStatus.CONFLICT} dos serviços deste {@code WebService}.
+	 *
+	 * @param rnfException um {@link ResourceConflictException} quando enviado com a mensagem de erro
+	 * @return {@link ResponseEntity} com a resposta {@code HTTP}
+	 */
+	@ExceptionHandler(ResourceConflictException.class)
+	public ResponseEntity<?> handlerResourceConflictException(final ResourceConflictException rnfException) {
+
+		final ErrorDetails errorDetails = ErrorDetails.Builder.newBuilder().timestamp(new Date().getTime()).status(HttpStatus.CONFLICT.value())
+				.title("Informação conflitante!").detail(rnfException.getMessage()).devMessage(rnfException.getClass().getName()).build();
+
+		return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
+	}
+
+	/**
+	 * Método para tratar os erros de {@code HttpStatus.UNAUTHORIZED} de autenticações.
+	 *
+	 * @param authException um {@link AuthenticationException} quando enviado com a mensagem de erro
+	 * @param response um {@link HttpServletResponse}
+	 * @return {@link ResponseEntity} com a resposta {@code HTTP}
+	 */
+	@ExceptionHandler(AuthenticationException.class)
+	public ResponseEntity<?> handleAuthenticationException(final AuthenticationException authException) {
+
+		final ErrorDetails errorDetails = ErrorDetails.Builder.newBuilder().timestamp(new Date().getTime()).status(HttpStatus.UNAUTHORIZED.value())
+				.title("Não Autenticado!").detail(authException.getMessage()).devMessage(authException.getClass().getName()).build();
+
+		return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
+	}
+
+	/**
+	 * Método para tratar os erros de {@code HttpStatus.UNAUTHORIZED} de autenticações service.
+	 *
+	 * @param authException um {@link AuthenticationServiceException} quando enviado com a mensagem de erro
+	 * @return {@link ResponseEntity} com a resposta {@code HTTP}
+	 */
+	@ExceptionHandler(AuthenticationServiceException.class)
+	public ResponseEntity<?> handleAuthenticationServiceException(final AuthenticationServiceException authException) {
+
+		final ErrorDetails errorDetails = ErrorDetails.Builder.newBuilder().timestamp(new Date().getTime()).status(HttpStatus.UNAUTHORIZED.value())
+				.title("Não Autenticado!").detail(authException.getMessage()).devMessage(authException.getClass().getName()).build();
+
+		return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
+	}
+
+	/**
+	 * Método para tratar os erros de {@code HttpStatus.FORBIDDEN} de autenticações não permitidos.
+	 *
+	 * @param accessException um {@link AccessDeniedException} quando enviado com a mensagem de erro
+	 * @param response um {@link HttpServletResponse}
+	 * @return {@link ResponseEntity} com a resposta {@code HTTP}
+	 */
+	@ExceptionHandler(AccessDeniedException.class)
+	public ResponseEntity<?> handleAccessDeniedException(final AccessDeniedException accessException) {
+
+		final ErrorDetails errorDetails = ErrorDetails.Builder.newBuilder().timestamp(new Date().getTime()).status(HttpStatus.FORBIDDEN.value())
+				.title("Não Autorizado!").detail(accessException.getMessage()).devMessage(accessException.getClass().getName()).build();
+
+		return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
+	}
+
+	/**
+	 * @param insauthException um {@link InsufficientAuthenticationException} quando enviado com a mensagem de erro
+	 * @param response um {@link HttpServletResponse}
+	 * @return {@link ResponseEntity} com a resposta {@code HTTP}
+	 */
+	@ExceptionHandler(InsufficientAuthenticationException.class)
+	public ResponseEntity<?> handleInsufficientAuthenticationException(final InsufficientAuthenticationException insauthException) {
+
+		final ErrorDetails errorDetails = ErrorDetails.Builder.newBuilder().timestamp(new Date().getTime()).status(HttpStatus.UNAUTHORIZED.value())
+				.title("Não Autorizado!").detail(insauthException.getMessage()).devMessage(insauthException.getClass().getName()).build();
+
+		return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
 	}
 
 	/**
@@ -89,21 +189,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
 	}
 
-	/**
-	 * Método para tratar dos erros de {@code HttpStatus.CONFLICT} dos serviços deste {@code WebService}.
-	 *
-	 * @param rnfException um {@link ResourceConflictException} quando enviado com a mensagem de erro
-	 * @return {@link ResponseEntity} com a resposta {@code HTTP}
-	 */
-	@ExceptionHandler(ResourceConflictException.class)
-	public ResponseEntity<?> handlerResourceConflictException(final ResourceConflictException rnfException) {
-
-		final ErrorDetails errorDetails = ErrorDetails.Builder.newBuilder().timestamp(new Date().getTime()).status(HttpStatus.CONFLICT.value())
-				.title("Informação conflitante!").detail(rnfException.getMessage()).devMessage(rnfException.getClass().getName()).build();
-
-		return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
-	}
-
 	@Override
 	protected ResponseEntity<Object> handleMissingServletRequestParameter(final MissingServletRequestParameterException msrpException,
 			final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
@@ -121,17 +206,9 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 		final List<FieldError> lista = manvException.getBindingResult().getFieldErrors();
 
-		final StringBuilder fildMessage = new StringBuilder();
-
-		for (int index = 0; index < lista.size(); index++) {
-
-			if (index > 0) {
-
-				fildMessage.append(" | ");
-			}
-
-			fildMessage.append("campo:").append(lista.get(index).getField()).append(" - ").append(lista.get(index).getDefaultMessage());
-		}
+		final String fildMessage = lista.stream().map(field -> {
+			return new StringBuilder("'").append(field.getField()).append("': ").append(field.getDefaultMessage()).toString();
+		}).collect(Collectors.joining(" , "));
 
 		final ErrorDetails errorDetails = ErrorDetails.Builder.newBuilder().timestamp(new Date().getTime()).status(HttpStatus.BAD_REQUEST.value())
 				.title("Erro de validação de campo!").detail(fildMessage.toString()).devMessage(manvException.getClass().getName()).build();
