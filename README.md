@@ -19,3 +19,13 @@ Serviços de Usuários
 * Login
 * Token
 * Authetication/Authorization
+
+### Update
+
+* Postgres 42.2.14
+
+### URI
+
+- GET :  /divulplace-api-usuario/auth/
+- POST :  /divulplace-api-usuario/auth/signup
+

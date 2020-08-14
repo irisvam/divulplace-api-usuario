@@ -15,7 +15,7 @@
 		<springdata.version>2.2.0.RELEASE</springdata.version>
 		<springsecurity.version>5.2.0.RELEASE</springsecurity.version>
 		<hibernate.version>5.2.17.Final</hibernate.version>
-		<postgresql.version>42.2.5</postgresql.version>
+		<postgresql.version>42.2.14</postgresql.version>
 		<slf4j.version>1.7.26</slf4j.version>
 		<jsonwebtoken.version>0.9.1</jsonwebtoken.version>
 		<junit.version>4.12</junit.version>
