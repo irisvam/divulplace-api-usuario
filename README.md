@@ -23,9 +23,14 @@ Serviços de Usuários
 ### Update
 
 * Postgres 42.2.14
+* Gson 2.8.5
 
 ### URI
 
 - GET :  /divulplace-api-usuario/auth/
 - POST :  /divulplace-api-usuario/auth/signup
+
+- GET :  /divulplace-api-usuario/usuarios/{id}
+- PUT :  /divulplace-api-usuario/usuarios/{id}
+
 

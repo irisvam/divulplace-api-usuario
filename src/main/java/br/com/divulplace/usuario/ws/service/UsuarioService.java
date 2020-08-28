@@ -22,8 +22,6 @@ public class UsuarioService implements UserDetailsService {
 		final Usuario user = repUsuario.findByLogin(username)
 				.orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado -> login or email : " + username));
 
-		user.getRoles();
-
 		return UserPrinciple.build(user);
 	}
 

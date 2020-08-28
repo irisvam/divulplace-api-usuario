@@ -19,6 +19,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.NaturalId;
 
 import br.com.divulplace.usuario.util.enums.TipoSituacao;
@@ -61,6 +63,7 @@ public class Usuario {
 
 	@ManyToMany
 	@JoinTable(name = "tb_usuario_tb_perfil", joinColumns = @JoinColumn(name = "usro_id_usuario", referencedColumnName = "user_id_usuario"), inverseJoinColumns = @JoinColumn(name = "usro_id_perfil", referencedColumnName = "role_id_perfil"))
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private Set<Role> roles = new HashSet<Role>();
 
 	public Usuario() {

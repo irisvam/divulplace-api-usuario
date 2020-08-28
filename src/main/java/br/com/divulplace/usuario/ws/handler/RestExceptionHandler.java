@@ -15,6 +15,7 @@ import org.springframework.security.authentication.InsufficientAuthenticationExc
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -222,6 +223,19 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 		final ErrorDetails errorDetails = ErrorDetails.Builder.newBuilder().timestamp(new Date().getTime()).status(status.value())
 				.title("Erro na requisição interna!").detail(exception.getMessage()).devMessage(exception.getClass().getName()).build();
+
+		return new ResponseEntity<>(errorDetails, headers, status);
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleMissingPathVariable(final MissingPathVariableException mpvException, final HttpHeaders headers, final HttpStatus status,
+			final WebRequest request) {
+
+		final ErrorDetails errorDetails = ErrorDetails.Builder.newBuilder().timestamp(new Date().getTime()).status(HttpStatus.BAD_REQUEST.value())
+				.title("Parâmetro requerido não recebido!")
+				.detail("Parâmetro '" + mpvException.getParameter().getParameterName() + "' do tipo '"
+						+ mpvException.getParameter().getParameterType().getName() + "' está faltando.")
+				.devMessage(mpvException.getClass().getName()).build();
 
 		return new ResponseEntity<>(errorDetails, headers, status);
 	}

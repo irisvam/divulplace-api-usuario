@@ -1,6 +1,7 @@
 package br.com.divulplace.usuario.ws.configuration.jwt;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -17,8 +18,10 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 
 import br.com.divulplace.usuario.model.LoginForm;
+import br.com.divulplace.usuario.model.UserLogin;
 import br.com.divulplace.usuario.model.UserPrinciple;
 
 /**
@@ -67,9 +70,23 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	protected void successfulAuthentication(final HttpServletRequest request, final HttpServletResponse response, final FilterChain chain,
 			final Authentication authResult) throws IOException, ServletException {
 
-		final String jwt = jwtProvider.generateToken((UserPrinciple) authResult.getPrincipal());
+		final UserPrinciple userPrincipal = (UserPrinciple) authResult.getPrincipal();
+		final String jwt = jwtProvider.generateToken(userPrincipal);
 
+		final UserLogin userRetorno = new UserLogin();
+		userRetorno.setId(userPrincipal.getId());
+		userRetorno.setName(userPrincipal.getName());
+		userRetorno.setEmail(userPrincipal.getEmail());
+		userRetorno.setToken(jwt);
+
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
 		response.addHeader("Authorization", "Bearer " + jwt);
+
+		final String retorno = new Gson().toJson(userRetorno);
+		final PrintWriter out = response.getWriter();
+		out.print(retorno);
+		out.flush();
 	}
 
 	@Override
