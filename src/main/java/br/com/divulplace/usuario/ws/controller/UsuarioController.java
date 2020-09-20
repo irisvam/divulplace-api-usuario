@@ -73,20 +73,29 @@ public class UsuarioController {
 
 		final Set<Role> roles = new HashSet<Role>();
 
-		signUpRequest.getRole().forEach(role -> {
-			switch (role) {
-				case ROLE_ADMIN:
-					final Role adminRole = repRole.findByNome(RoleName.ROLE_ADMIN).orElseThrow(() -> new ParameterNotValidException(sourceMessage
-							.getMessage(MessageProperties.BAD_REQUEST.getDescricao(), new Object[] {"perfil", "não existente"}, locale)));
-					roles.add(adminRole);
+		if(null == signUpRequest.getRole() || signUpRequest.getRole().isEmpty()) {
 
-					break;
-				default:
-					final Role userRole = repRole.findByNome(RoleName.ROLE_USER).orElseThrow(() -> new ParameterNotValidException(sourceMessage
-							.getMessage(MessageProperties.BAD_REQUEST.getDescricao(), new Object[] {"perfil", "não existente"}, locale)));
-					roles.add(userRole);
-			}
-		});
+			final Role userRole = repRole.findByNome(RoleName.ROLE_USER).orElseThrow(() -> new ParameterNotValidException(sourceMessage
+					.getMessage(MessageProperties.BAD_REQUEST.getDescricao(), new Object[] {"perfil", "não existente"}, locale)));
+			roles.add(userRole);
+
+		} else {
+
+			signUpRequest.getRole().forEach(role -> {
+				switch (role) {
+					case ROLE_ADMIN:
+						final Role adminRole = repRole.findByNome(RoleName.ROLE_ADMIN).orElseThrow(() -> new ParameterNotValidException(sourceMessage
+								.getMessage(MessageProperties.BAD_REQUEST.getDescricao(), new Object[] {"perfil", "não existente"}, locale)));
+						roles.add(adminRole);
+	
+						break;
+					default:
+						final Role userRole = repRole.findByNome(RoleName.ROLE_USER).orElseThrow(() -> new ParameterNotValidException(sourceMessage
+								.getMessage(MessageProperties.BAD_REQUEST.getDescricao(), new Object[] {"perfil", "não existente"}, locale)));
+						roles.add(userRole);
+				}
+			});
+		}
 
 		user.setRoles(roles);
 		repUsuario.save(user);
