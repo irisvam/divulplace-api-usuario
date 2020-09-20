@@ -22,7 +22,7 @@ Serviços de Usuários
 
 ### Update
 
-* Postgres 42.2.14
+* Postgres 42.2.14 (DATABASE 9.6)
 * Gson 2.8.5
 
 ### URI
