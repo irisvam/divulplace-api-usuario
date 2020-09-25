@@ -19,7 +19,7 @@ public class UsuarioService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
 
-		final Usuario user = repUsuario.findByLogin(username)
+		final Usuario user = this.repUsuario.findByLogin(username)
 				.orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado -> login or email : " + username));
 
 		return UserPrinciple.build(user);

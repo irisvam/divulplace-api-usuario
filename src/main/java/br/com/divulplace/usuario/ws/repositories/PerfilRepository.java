@@ -5,12 +5,11 @@ import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import br.com.divulplace.usuario.entity.Role;
-import br.com.divulplace.usuario.util.enums.RoleName;
+import br.com.divulplace.usuario.entity.Afiliado;
 
 @Repository
-public interface RoleRepository extends CrudRepository<Role, Long> {
+public interface PerfilRepository extends CrudRepository<Afiliado, Long> {
 
-	Optional<Role> findByNome(RoleName nome);
+	Optional<Afiliado> findByUsuarioId(Long id);
 
 }

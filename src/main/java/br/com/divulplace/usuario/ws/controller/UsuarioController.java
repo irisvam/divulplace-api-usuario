@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.divulplace.usuario.entity.Afiliado;
 import br.com.divulplace.usuario.entity.Role;
 import br.com.divulplace.usuario.entity.Usuario;
 import br.com.divulplace.usuario.model.ResponseMessage;
@@ -26,6 +27,7 @@ import br.com.divulplace.usuario.util.enums.MessageProperties;
 import br.com.divulplace.usuario.util.enums.RoleName;
 import br.com.divulplace.usuario.util.enums.TipoSituacao;
 import br.com.divulplace.usuario.ws.exception.ParameterNotValidException;
+import br.com.divulplace.usuario.ws.repositories.PerfilRepository;
 import br.com.divulplace.usuario.ws.repositories.RoleRepository;
 import br.com.divulplace.usuario.ws.repositories.UsuarioRepository;
 
@@ -47,6 +49,9 @@ public class UsuarioController {
 	private UsuarioRepository repUsuario;
 
 	@Autowired
+	private PerfilRepository repPerfil;
+
+	@Autowired
 	private RoleRepository repRole;
 
 	@Autowired
@@ -55,52 +60,88 @@ public class UsuarioController {
 	@RequestMapping("/")
 	public String init() {
 
-		return "Usuario Controller.";
+		return "Usuário Controller.";
 	}
 
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody final SignUpForm signUpRequest) {
 
-		if (repUsuario.existsByLogin(signUpRequest.getUsername())) {
+		if (this.repUsuario.existsByLogin(signUpRequest.getUsername())) {
 
 			throw new ParameterNotValidException(
-					sourceMessage.getMessage(MessageProperties.BAD_REQUEST.getDescricao(), new Object[] {"username", "já está em uso"}, locale));
+					this.sourceMessage.getMessage(MessageProperties.BAD_REQUEST.getDescricao(), new Object[] {"username", "já está em uso"}, locale));
 		}
 
-		// Creating user's account
-		final Usuario user = new Usuario(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()), signUpRequest.getName(),
+		final Usuario user = new Usuario(signUpRequest.getUsername(), this.encoder.encode(signUpRequest.getPassword()), signUpRequest.getName(),
 				signUpRequest.getEmail(), TipoSituacao.CADASTRADO);
+
+		user.setRoles(this.criarRoles(signUpRequest.getRole()));
+
+		final Afiliado afiliado = new Afiliado();
+		afiliado.setDesNome(user.getNome());
+		afiliado.setDesEmail(user.getEmail());
+		afiliado.setUsuario(this.repUsuario.save(user));
+
+		this.repPerfil.save(afiliado);
+
+		return new ResponseEntity<>(new ResponseMessage("Usuário registrado com Sucesso!"), HttpStatus.OK);
+	}
+
+	/**
+	 * Mértodo para criação das {@code ROLES} do usuário a partir de uma lista recebida.
+	 *
+	 * @param signUpRole {@code SET<}{@link RoleName}{@code >}
+	 * @return {@code Set<}{@link Role}{@code >}
+	 */
+	private Set<Role> criarRoles(final Set<RoleName> signUpRole) {
 
 		final Set<Role> roles = new HashSet<Role>();
 
-		if(null == signUpRequest.getRole() || signUpRequest.getRole().isEmpty()) {
+		if (null == signUpRole || signUpRole.isEmpty()) {
 
-			final Role userRole = repRole.findByNome(RoleName.ROLE_USER).orElseThrow(() -> new ParameterNotValidException(sourceMessage
-					.getMessage(MessageProperties.BAD_REQUEST.getDescricao(), new Object[] {"perfil", "não existente"}, locale)));
-			roles.add(userRole);
+			roles.add(this.criarUserRule());
 
 		} else {
 
-			signUpRequest.getRole().forEach(role -> {
+			signUpRole.forEach(role -> {
+
 				switch (role) {
 					case ROLE_ADMIN:
-						final Role adminRole = repRole.findByNome(RoleName.ROLE_ADMIN).orElseThrow(() -> new ParameterNotValidException(sourceMessage
-								.getMessage(MessageProperties.BAD_REQUEST.getDescricao(), new Object[] {"perfil", "não existente"}, locale)));
+
+						final Role adminRole = this.repRole.findByNome(RoleName.ROLE_ADMIN).orElseThrow(() -> this.criarNotValidException());
 						roles.add(adminRole);
-	
+
 						break;
 					default:
-						final Role userRole = repRole.findByNome(RoleName.ROLE_USER).orElseThrow(() -> new ParameterNotValidException(sourceMessage
-								.getMessage(MessageProperties.BAD_REQUEST.getDescricao(), new Object[] {"perfil", "não existente"}, locale)));
-						roles.add(userRole);
+
+						roles.add(this.criarUserRule());
+						break;
 				}
 			});
 		}
 
-		user.setRoles(roles);
-		repUsuario.save(user);
+		return roles;
+	}
 
-		return new ResponseEntity<>(new ResponseMessage("Usuário registrado com Sucesso!"), HttpStatus.OK);
+	/**
+	 * Método para criar um papel de {@code USER} para o usuário.
+	 *
+	 * @return {@link Role}
+	 */
+	private Role criarUserRule() {
+
+		return this.repRole.findByNome(RoleName.ROLE_USER).orElseThrow(() -> this.criarNotValidException());
+	}
+
+	/**
+	 * Método para criar uma exceção de perfil não existe.
+	 *
+	 * @return {@link ParameterNotValidException}
+	 */
+	private ParameterNotValidException criarNotValidException() {
+
+		return new ParameterNotValidException(
+				this.sourceMessage.getMessage(MessageProperties.BAD_REQUEST.getDescricao(), new Object[] {"role", "não existente"}, locale));
 	}
 
 }

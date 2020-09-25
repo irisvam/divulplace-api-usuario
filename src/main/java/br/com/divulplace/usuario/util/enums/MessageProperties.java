@@ -16,9 +16,9 @@ package br.com.divulplace.usuario.util.enums;
  * @see #BAD_REQUEST
  * @see #POST_BAD_CREDENTIALS
  */
-public enum MessageProperties {
+public enum MessageProperties implements ICommonEnum {
 
-	MESSAGE			("message"),
+	MESSAGE			("controller.message"),
 	POST_CONFLICT 	("controller.post.conflict"), 
 	POST_CREATED 	("controller.post.created"),
 	GET_NOT_FOUND 	("controller.get.not_found"),
@@ -48,11 +48,7 @@ public enum MessageProperties {
 		return descricao;
 	}
 
-	/**
-	 * Método para ordenar os valores deste {@code Enum}.
-	 *
-	 * @return {@link MessageProperties}{@code []}
-	 */
+	@Override
 	public Object readResolve() {
 
 		return MessageProperties.values()[ordinal()];

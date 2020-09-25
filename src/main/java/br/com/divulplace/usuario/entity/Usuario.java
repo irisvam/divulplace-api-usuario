@@ -1,5 +1,6 @@
 package br.com.divulplace.usuario.entity;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -65,6 +68,10 @@ public class Usuario {
 	@JoinTable(name = "tb_usuario_tb_perfil", joinColumns = @JoinColumn(name = "usro_id_usuario", referencedColumnName = "user_id_usuario"), inverseJoinColumns = @JoinColumn(name = "usro_id_perfil", referencedColumnName = "role_id_perfil"))
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private Set<Role> roles = new HashSet<Role>();
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "user_dt_cadastro")
+	private Date dtaCadastro;
 
 	public Usuario() {
 

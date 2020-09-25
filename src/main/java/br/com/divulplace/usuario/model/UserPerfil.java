@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class UserPerfil {
 
-	private Integer id;
+	private Long id;
 	private String codigo;
 	private String tratamento;
 	private String img;
@@ -18,12 +18,12 @@ public class UserPerfil {
 	private String email;
 	private String link;
 
-	public Integer getId() {
+	public Long getId() {
 
 		return id;
 	}
 
-	public void setId(final Integer id) {
+	public void setId(final Long id) {
 
 		this.id = id;
 	}
