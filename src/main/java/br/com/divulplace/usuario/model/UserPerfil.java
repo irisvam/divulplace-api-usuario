@@ -14,7 +14,6 @@ public class UserPerfil {
 	private Date dataNascimento;
 	private String estadoCivil;
 	private String sexo;
-	private String sobre;
 	private String email;
 	private String link;
 
@@ -116,16 +115,6 @@ public class UserPerfil {
 	public void setSexo(final String sexo) {
 
 		this.sexo = sexo;
-	}
-
-	public String getSobre() {
-
-		return sobre;
-	}
-
-	public void setSobre(final String sobre) {
-
-		this.sobre = sobre;
 	}
 
 	public String getEmail() {

@@ -26,13 +26,6 @@ CREATE SEQUENCE public.tb_rede_social_id_seq
 	START 1
 	CACHE 1;
 
-CREATE SEQUENCE public.tb_conta_bancaria_id_seq
-	INCREMENT 1
-	MINVALUE 1
-	MAXVALUE 9223372036854775807
-	START 1
-	CACHE 1;
-
 CREATE TABLE public.tb_afiliado
 (
 	afld_id_afiliado bigint NOT NULL DEFAULT nextval('tb_afiliado_id_seq'::regclass),

@@ -1,5 +1,6 @@
 package br.com.divulplace.usuario.ws.controller;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -69,13 +70,15 @@ public class UsuarioController {
 		if (this.repUsuario.existsByLogin(signUpRequest.getUsername())) {
 
 			throw new ParameterNotValidException(
-					this.sourceMessage.getMessage(MessageProperties.BAD_REQUEST.getDescricao(), new Object[] {"username", "já está em uso"}, locale));
+					this.sourceMessage.getMessage(MessageProperties.BAD_REQUEST.getDescricao(),
+							new Object[] { "username", "já está em uso" }, locale));
 		}
 
-		final Usuario user = new Usuario(signUpRequest.getUsername(), this.encoder.encode(signUpRequest.getPassword()), signUpRequest.getName(),
-				signUpRequest.getEmail(), TipoSituacao.CADASTRADO);
+		final Usuario user = new Usuario(signUpRequest.getUsername(), this.encoder.encode(signUpRequest.getPassword()),
+				signUpRequest.getName(), signUpRequest.getEmail(), TipoSituacao.CADASTRADO);
 
 		user.setRoles(this.criarRoles(signUpRequest.getRole()));
+		user.setDtaCadastro(new Date());
 
 		final Afiliado afiliado = new Afiliado();
 		afiliado.setDesNome(user.getNome());
@@ -88,7 +91,8 @@ public class UsuarioController {
 	}
 
 	/**
-	 * Mértodo para criação das {@code ROLES} do usuário a partir de uma lista recebida.
+	 * Mértodo para criação das {@code ROLES} do usuário a partir de uma lista
+	 * recebida.
 	 *
 	 * @param signUpRole {@code SET<}{@link RoleName}{@code >}
 	 * @return {@code Set<}{@link Role}{@code >}
@@ -106,16 +110,17 @@ public class UsuarioController {
 			signUpRole.forEach(role -> {
 
 				switch (role) {
-					case ROLE_ADMIN:
+				case ROLE_ADMIN:
 
-						final Role adminRole = this.repRole.findByNome(RoleName.ROLE_ADMIN).orElseThrow(() -> this.criarNotValidException());
-						roles.add(adminRole);
+					final Role adminRole = this.repRole.findByNome(RoleName.ROLE_ADMIN)
+							.orElseThrow(() -> this.criarNotValidException());
+					roles.add(adminRole);
 
-						break;
-					default:
+					break;
+				default:
 
-						roles.add(this.criarUserRule());
-						break;
+					roles.add(this.criarUserRule());
+					break;
 				}
 			});
 		}
@@ -140,8 +145,8 @@ public class UsuarioController {
 	 */
 	private ParameterNotValidException criarNotValidException() {
 
-		return new ParameterNotValidException(
-				this.sourceMessage.getMessage(MessageProperties.BAD_REQUEST.getDescricao(), new Object[] {"role", "não existente"}, locale));
+		return new ParameterNotValidException(this.sourceMessage.getMessage(
+				MessageProperties.BAD_REQUEST.getDescricao(), new Object[] { "role", "não existente" }, locale));
 	}
 
 }

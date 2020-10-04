@@ -29,8 +29,8 @@ import org.hibernate.annotations.NaturalId;
 import br.com.divulplace.usuario.util.enums.TipoSituacao;
 
 @Entity
-@Table(name = "tb_usuario", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_nm_login"}),
-		@UniqueConstraint(columnNames = {"user_nm_email"})})
+@Table(name = "tb_usuario", uniqueConstraints = { @UniqueConstraint(columnNames = { "user_nm_login" }),
+		@UniqueConstraint(columnNames = { "user_nm_email" }) })
 public class Usuario {
 
 	@Id
@@ -68,7 +68,7 @@ public class Usuario {
 	@JoinTable(name = "tb_usuario_tb_perfil", joinColumns = @JoinColumn(name = "usro_id_usuario", referencedColumnName = "user_id_usuario"), inverseJoinColumns = @JoinColumn(name = "usro_id_perfil", referencedColumnName = "role_id_perfil"))
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private Set<Role> roles = new HashSet<Role>();
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "user_dt_cadastro")
 	private Date dtaCadastro;
@@ -78,7 +78,8 @@ public class Usuario {
 		super();
 	}
 
-	public Usuario(final String login, final String senha, final String nome, final String email, final TipoSituacao tpoSituacao) {
+	public Usuario(final String login, final String senha, final String nome, final String email,
+			final TipoSituacao tpoSituacao) {
 
 		super();
 		this.login = login;
@@ -156,6 +157,16 @@ public class Usuario {
 	public void setRoles(final Set<Role> roles) {
 
 		this.roles = roles;
+	}
+
+	public Date getDtaCadastro() {
+
+		return dtaCadastro;
+	}
+
+	public void setDtaCadastro(final Date dtaCadastro) {
+
+		this.dtaCadastro = dtaCadastro;
 	}
 
 	@Override
