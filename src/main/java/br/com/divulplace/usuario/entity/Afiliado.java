@@ -37,9 +37,6 @@ public class Afiliado {
 	@Column(name = "afld_nm_apelido", length = 150)
 	private String desApelido;
 
-	@Column(name = "afld_nm_sobre", length = 500)
-	private String desSobre;
-
 	@Temporal(TemporalType.DATE)
 	@Column(name = "afld_dt_nascimento")
 	private Date dtaNascimento;
@@ -106,16 +103,6 @@ public class Afiliado {
 	public void setDesApelido(final String desApelido) {
 
 		this.desApelido = desApelido;
-	}
-
-	public String getDesSobre() {
-
-		return desSobre;
-	}
-
-	public void setDesSobre(final String desSobre) {
-
-		this.desSobre = desSobre;
 	}
 
 	public Date getDtaNascimento() {

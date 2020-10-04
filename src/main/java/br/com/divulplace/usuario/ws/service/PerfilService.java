@@ -36,7 +36,6 @@ public class PerfilService {
 			userPerfil.setDataNascimento(afiliado.getDtaNascimento());
 			userPerfil.setEstadoCivil((null != afiliado.getTpoEstadoCivil() ? afiliado.getTpoEstadoCivil().name() : ""));
 			userPerfil.setSexo((null != afiliado.getTpoSexo() ? afiliado.getTpoSexo().name() : ""));
-			userPerfil.setSobre(afiliado.getDesSobre());
 			userPerfil.setEmail(afiliado.getDesEmail());
 			userPerfil.setLink(afiliado.getUrlLink());
 		}
@@ -62,7 +61,6 @@ public class PerfilService {
 			afiliado.setDocCpf(userPerfil.getCpf());
 			afiliado.setTpoEstadoCivil(EnumCommonUtil.getInstance().encontrarEnum(userPerfil.getEstadoCivil(), TipoEstadoCivil.values()));
 			afiliado.setTpoSexo(EnumCommonUtil.getInstance().encontrarEnum(userPerfil.getSexo(), TipoSexo.values()));
-			afiliado.setDesSobre(userPerfil.getSobre());
 			
 			this.repPerfil.save(afiliado);
 			icAtualizado = true;

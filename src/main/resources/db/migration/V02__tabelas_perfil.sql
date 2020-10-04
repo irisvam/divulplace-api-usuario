@@ -39,7 +39,6 @@ CREATE TABLE public.tb_afiliado
 	afld_nm_tratamento character varying(100),
 	afld_nm_nome character varying(200),
 	afld_nm_apelido character varying(150),
-	afld_nm_sobre character varying(500),
 	afld_dt_nascimento date,
 	afld_nm_cpf character varying(11),
 	afld_tp_estado_civil character varying(10),
