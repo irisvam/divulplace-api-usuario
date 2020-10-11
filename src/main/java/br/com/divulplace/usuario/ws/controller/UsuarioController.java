@@ -2,13 +2,11 @@ package br.com.divulplace.usuario.ws.controller;
 
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,16 +33,11 @@ import br.com.divulplace.usuario.ws.repositories.UsuarioRepository;
 /**
  * Classe {@code REST} de controle para serviços de usuários.
  */
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*")
 @RestController
 @Validated
 @RequestMapping("/auth")
-public class UsuarioController {
-
-	private final Locale locale = new Locale("pt_br");
-
-	@Autowired
-	private transient MessageSource sourceMessage;
+public class UsuarioController extends CommonController {
 
 	@Autowired
 	private UsuarioRepository repUsuario;
@@ -70,8 +63,8 @@ public class UsuarioController {
 		if (this.repUsuario.existsByLogin(signUpRequest.getUsername())) {
 
 			throw new ParameterNotValidException(
-					this.sourceMessage.getMessage(MessageProperties.BAD_REQUEST.getDescricao(),
-							new Object[] { "username", "já está em uso" }, locale));
+					super.getSourceMessage().getMessage(MessageProperties.BAD_REQUEST.getDescricao(),
+							new Object[] { "username", "já está em uso" }, super.getLocale()));
 		}
 
 		final Usuario user = new Usuario(signUpRequest.getUsername(), this.encoder.encode(signUpRequest.getPassword()),
@@ -145,8 +138,8 @@ public class UsuarioController {
 	 */
 	private ParameterNotValidException criarNotValidException() {
 
-		return new ParameterNotValidException(this.sourceMessage.getMessage(
-				MessageProperties.BAD_REQUEST.getDescricao(), new Object[] { "role", "não existente" }, locale));
+		return new ParameterNotValidException(super.getSourceMessage().getMessage(
+				MessageProperties.BAD_REQUEST.getDescricao(), new Object[] { "role", "não existente" }, super.getLocale()));
 	}
 
 }

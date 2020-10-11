@@ -34,14 +34,17 @@ public class Endereco {
 	@Column(name = "ende_nm_bairro", length = 150)
 	private String desBairro;
 
-	@Column(name = "ende_cd_pais")
-	private Short codPais;
+	@Column(name = "ende_cd_pais", length = 3)
+	private String codPais;
 
 	@Column(name = "ende_uf_estado", length = 2)
 	private String ufEstado;
 
 	@Column(name = "ende_cd_cidade")
-	private Short codCidade;
+	private Integer codCidade;
+
+	@Column(name = "ende_nm_cidade", length = 100)
+	private String desCidade;
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ende_id_afiliado", referencedColumnName = "afld_id_afiliado")
@@ -107,12 +110,12 @@ public class Endereco {
 		this.desBairro = desBairro;
 	}
 
-	public Short getCodPais() {
+	public String getCodPais() {
 
 		return codPais;
 	}
 
-	public void setCodPais(final Short codPais) {
+	public void setCodPais(final String codPais) {
 
 		this.codPais = codPais;
 	}
@@ -127,14 +130,24 @@ public class Endereco {
 		this.ufEstado = ufEstado;
 	}
 
-	public Short getCodCidade() {
+	public Integer getCodCidade() {
 
 		return codCidade;
 	}
 
-	public void setCodCidade(final Short codCidade) {
+	public void setCodCidade(final Integer codCidade) {
 
 		this.codCidade = codCidade;
+	}
+
+	public String getDesCidade() {
+	
+		return desCidade;
+	}
+
+	public void setDesCidade(final String desCidade) {
+	
+		this.desCidade = desCidade;
 	}
 
 	public Afiliado getAfiliado() {

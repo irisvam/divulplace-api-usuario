@@ -10,6 +10,11 @@ import br.com.divulplace.usuario.entity.Usuario;
 import br.com.divulplace.usuario.model.UserPrinciple;
 import br.com.divulplace.usuario.ws.repositories.UsuarioRepository;
 
+/**
+ * Classe {@code Service} para formatação de dados do Usuário.
+ * 
+ * @see UserDetailsService
+ */
 @Service
 public class UsuarioService implements UserDetailsService {
 

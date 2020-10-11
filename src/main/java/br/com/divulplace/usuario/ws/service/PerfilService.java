@@ -10,12 +10,21 @@ import br.com.divulplace.usuario.util.enums.TipoEstadoCivil;
 import br.com.divulplace.usuario.util.enums.TipoSexo;
 import br.com.divulplace.usuario.ws.repositories.PerfilRepository;
 
+/**
+ * Classe {@code Service} para formatação de dados do Perfil do usuário.
+ */
 @Service
 public class PerfilService {
 
 	@Autowired
 	private PerfilRepository repPerfil;
 
+	/**
+	 * Método para encontrar dados do Perfil do Usuário.
+	 *
+	 * @param idUsuario {@link Long} com o {@code ID} do usuário
+	 * @return {@link UserPerfil} com as informações do Perfil
+	 */
 	public UserPerfil encontrarPerfil(final Long idUsuario) {
 
 		UserPerfil userPerfil = null;
@@ -43,6 +52,13 @@ public class PerfilService {
 		return userPerfil;
 	}
 
+	/**
+	 * Método para atualizar os dados do Perfil.
+	 *
+	 * @param idUsuario {@link Long} com o {@code ID} do usuário
+	 * @param userPerfil {@link UserPerfil} com as informações do Perfil
+	 * @return {@code boolean} com {@code TRUE|FALSE} se atualizado com sucesso
+	 */
 	public boolean atualizarPerfil(final Long idUsuario, final UserPerfil userPerfil) {
 
 		boolean icAtualizado = false;
@@ -61,7 +77,7 @@ public class PerfilService {
 			afiliado.setDocCpf(userPerfil.getCpf());
 			afiliado.setTpoEstadoCivil(EnumCommonUtil.getInstance().encontrarEnum(userPerfil.getEstadoCivil(), TipoEstadoCivil.values()));
 			afiliado.setTpoSexo(EnumCommonUtil.getInstance().encontrarEnum(userPerfil.getSexo(), TipoSexo.values()));
-			
+
 			this.repPerfil.save(afiliado);
 			icAtualizado = true;
 		}

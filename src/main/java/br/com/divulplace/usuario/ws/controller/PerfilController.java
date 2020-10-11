@@ -1,11 +1,8 @@
 package br.com.divulplace.usuario.ws.controller;
 
-import java.util.Locale;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -28,16 +25,11 @@ import br.com.divulplace.usuario.ws.service.PerfilService;
 /**
  * Classe {@code REST} de controle para serviços de Perfil.
  */
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*")
 @RestController
 @Validated
 @RequestMapping("/perfil")
-public class PerfilController {
-
-	private final Locale locale = new Locale("pt_br");
-
-	@Autowired
-	private transient MessageSource sourceMessage;
+public class PerfilController extends CommonController {
 
 	@Autowired
 	private UsuarioRepository repUsuario;
@@ -59,7 +51,7 @@ public class PerfilController {
 		if (null == userPerfil) {
 
 			throw new ParameterNotValidException(
-					this.sourceMessage.getMessage(MessageProperties.GET_NOT_FOUND.getDescricao(), new Object[] {"perfil"}, locale));
+					super.getSourceMessage().getMessage(MessageProperties.GET_NOT_FOUND.getDescricao(), new Object[] {"perfil"}, super.getLocale()));
 		}
 
 		return new ResponseEntity<UserPerfil>(userPerfil, HttpStatus.OK);
@@ -73,28 +65,26 @@ public class PerfilController {
 
 		if (null == usuario) {
 
-			throw new ParameterNotValidException(
-					this.sourceMessage.getMessage(MessageProperties.BAD_REQUEST.getDescricao(), new Object[] {"username", "já está em uso"}, locale));
+			throw new ParameterNotValidException(super.getSourceMessage().getMessage(MessageProperties.BAD_REQUEST.getDescricao(),
+					new Object[] {"Usuário", "não encontrado"}, super.getLocale()));
 		}
 
 		if (!usuario.getEmail().equals(userPerfil.getEmail()) || !usuario.getNome().equals(userPerfil.getNome())) {
 
 			usuario.setEmail(userPerfil.getEmail());
 			usuario.setNome(userPerfil.getNome());
-			
+
 			this.repUsuario.save(usuario);
 		}
 
 		if (!this.serPerfil.atualizarPerfil(idUsuario, userPerfil)) {
 
 			throw new ParameterNotValidException(
-					this.sourceMessage.getMessage(MessageProperties.PUT_CONFLICT.getDescricao(), new Object[] {"perfil"}, locale));
+					super.getSourceMessage().getMessage(MessageProperties.PUT_CONFLICT.getDescricao(), new Object[] {"perfil"}, super.getLocale()));
 		}
 
-		return new ResponseEntity<>(
-				new ResponseMessage(
-						this.sourceMessage.getMessage(MessageProperties.PUT_OK.getDescricao(), new Object[] {"Usuário", "atualizado"}, locale)),
-				HttpStatus.OK);
+		return new ResponseEntity<>(new ResponseMessage(super.getSourceMessage().getMessage(MessageProperties.PUT_OK.getDescricao(),
+				new Object[] {"Usuário", "atualizado"}, super.getLocale())), HttpStatus.OK);
 	}
 
 }

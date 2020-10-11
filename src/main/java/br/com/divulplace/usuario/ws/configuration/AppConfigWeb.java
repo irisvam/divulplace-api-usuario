@@ -52,7 +52,7 @@ public class AppConfigWeb extends WebMvcConfigurationSupport {
 	@Override
 	public void addCorsMappings(final CorsRegistry registry) {
 
-		registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE").allowedOrigins("*").allowedHeaders("*").allowCredentials(true);
+		registry.addMapping("/**").allowedOrigins("*");
 	}
 
 }

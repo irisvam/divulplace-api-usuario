@@ -52,9 +52,10 @@ CREATE TABLE public.tb_endereco (
 	ende_nm_complemento character varying(100),
 	ende_cd_cep character varying(9),
 	ende_nm_bairro character varying(150),
-	ende_cd_pais smallint,
+	ende_cd_pais character varying(3),
 	ende_uf_estado character varying(2),
-	ende_cd_cidade smallint,
+	ende_cd_cidade integer,
+	ende_nm_cidade character varying(100),
 	ende_id_afiliado bigint NOT NULL,
 	CONSTRAINT tb_endereco_pkey PRIMARY KEY (ende_id_endereco),
 	CONSTRAINT fk_tb_endereco_x_tb_afiliado_id FOREIGN KEY (ende_id_afiliado)
