@@ -18,44 +18,49 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.divulplace.usuario.entity.Afiliado;
 import br.com.divulplace.usuario.model.ResponseMessage;
 import br.com.divulplace.usuario.model.RetornoCadastro;
-import br.com.divulplace.usuario.model.UserEndereco;
+import br.com.divulplace.usuario.model.UserContato;
 import br.com.divulplace.usuario.util.enums.MessageProperties;
 import br.com.divulplace.usuario.ws.exception.ParameterNotValidException;
 import br.com.divulplace.usuario.ws.repositories.PerfilRepository;
-import br.com.divulplace.usuario.ws.service.EnderecoService;
+import br.com.divulplace.usuario.ws.service.ContatoService;
+import br.com.divulplace.usuario.ws.service.RedeSocialService;
 
 /**
- * Classe {@code REST} de controle para serviços de Endereço.
+ * Classe {@code REST} de controle para serviços de Contato.
  */
 @CrossOrigin(origins = "*")
 @RestController
 @Validated
-@RequestMapping("/endereco")
-public class EnderecoController extends CommonController {
+@RequestMapping("/contato")
+public class ContatoController extends CommonController {
 
 	@Autowired
-	private EnderecoService serEndereco;
+	private ContatoService serContato;
+
+	@Autowired
+	private RedeSocialService serSocial;
 
 	@Autowired
 	private PerfilRepository repPerfil;
 
 	@GetMapping("/{id}")
-	public ResponseEntity<UserEndereco> recuperarEndereco(@PathVariable(value = "id") final Long idAfiliado) {
+	public ResponseEntity<UserContato> recuperarContato(@PathVariable(value = "id") final Long idAfiliado) {
 
-		final UserEndereco userEndereco = this.serEndereco.encontrarEnderecoAfiliado(idAfiliado);
+		final UserContato userContato = this.serContato.encontrarContatoAfiliado(idAfiliado);
 
-		if (null == userEndereco) {
+		if (null == userContato) {
 
 			throw new ParameterNotValidException(super.getSourceMessage().getMessage(MessageProperties.GET_NOT_FOUND.getDescricao(),
-					new Object[] {"endereço"}, super.getLocale()));
+					new Object[] {"contatos"}, super.getLocale()));
 		}
 
-		return new ResponseEntity<UserEndereco>(userEndereco, HttpStatus.OK);
+		userContato.setRedesSociais(this.serSocial.encontrarListaRedesSociais(idAfiliado));
+
+		return new ResponseEntity<UserContato>(userContato, HttpStatus.OK);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<?> atualizarEndereco(@PathVariable(value = "id") final Long idUsuario,
-			@Valid @RequestBody final UserEndereco userEndereco) {
+	public ResponseEntity<?> atualizarContato(@PathVariable(value = "id") final Long idUsuario, @Valid @RequestBody final UserContato userContato) {
 
 		final Afiliado afiliado = this.repPerfil.findById(idUsuario).orElse(null);
 
@@ -65,19 +70,28 @@ public class EnderecoController extends CommonController {
 					new Object[] {"Afiliado", "não encontrado"}, super.getLocale()));
 		}
 
-		if (!this.serEndereco.atualizarEndereco(userEndereco)) {
+		if (!this.serContato.atualizarContato(userContato)) {
 
 			throw new ParameterNotValidException(
-					super.getSourceMessage().getMessage(MessageProperties.PUT_CONFLICT.getDescricao(), new Object[] {"endereço"}, super.getLocale()));
+					super.getSourceMessage().getMessage(MessageProperties.PUT_CONFLICT.getDescricao(), new Object[] {"contatos"}, super.getLocale()));
+		}
+
+		if (null != userContato.getRedesSociais() && !userContato.getRedesSociais().isEmpty()) {
+
+			if (!this.serContato.atualizarRedesSociais(afiliado, userContato.getRedesSociais())) {
+
+				throw new ParameterNotValidException(super.getSourceMessage().getMessage(MessageProperties.PUT_CONFLICT.getDescricao(),
+						new Object[] {"redes sociais"}, super.getLocale()));
+			}
 		}
 
 		return new ResponseEntity<>(new ResponseMessage(super.getSourceMessage().getMessage(MessageProperties.PUT_OK.getDescricao(),
-				new Object[] {"Endereço", "atualizado"}, super.getLocale())), HttpStatus.OK);
+				new Object[] {"Contatos", "atualizados"}, super.getLocale())), HttpStatus.OK);
 	}
 
 	@PostMapping("/{id}")
-	public ResponseEntity<RetornoCadastro> cadastrarEndereco(@PathVariable(value = "id") final Long idUsuario,
-			@Valid @RequestBody final UserEndereco userEndereco) {
+	public ResponseEntity<RetornoCadastro> cadastrarContato(@PathVariable(value = "id") final Long idUsuario,
+			@Valid @RequestBody final UserContato userContato) {
 
 		final Afiliado afiliado = this.repPerfil.findById(idUsuario).orElse(null);
 
@@ -87,12 +101,17 @@ public class EnderecoController extends CommonController {
 					new Object[] {"Afiliado", "não encontrado"}, super.getLocale()));
 		}
 
-		final RetornoCadastro retorno = this.serEndereco.cadastrarEndereco(afiliado, userEndereco);
+		final RetornoCadastro retorno = this.serContato.cadastrarContato(afiliado, userContato);
 
 		if (null == retorno) {
 
 			throw new ParameterNotValidException(
-					super.getSourceMessage().getMessage(MessageProperties.PUT_CONFLICT.getDescricao(), new Object[] {"endereço"}, super.getLocale()));
+					super.getSourceMessage().getMessage(MessageProperties.PUT_CONFLICT.getDescricao(), new Object[] {"contatos"}, super.getLocale()));
+		}
+
+		if (null != userContato.getRedesSociais() && !userContato.getRedesSociais().isEmpty()) {
+
+			this.serContato.atualizarRedesSociais(afiliado, userContato.getRedesSociais());
 		}
 
 		return new ResponseEntity<RetornoCadastro>(retorno, HttpStatus.OK);

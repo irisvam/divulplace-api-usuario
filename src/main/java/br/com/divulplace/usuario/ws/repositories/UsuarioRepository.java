@@ -7,6 +7,11 @@ import org.springframework.stereotype.Repository;
 
 import br.com.divulplace.usuario.entity.Usuario;
 
+/**
+ * Classe {@code Repository} para {@link Usuario}.
+ * 
+ * @see PagingAndSortingRepository
+ */
 @Repository
 public interface UsuarioRepository extends PagingAndSortingRepository<Usuario, Long> {
 

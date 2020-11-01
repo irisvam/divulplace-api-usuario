@@ -64,9 +64,9 @@ CREATE TABLE public.tb_endereco (
 
 CREATE TABLE public.tb_contato (
 	cont_id_contato bigint NOT NULL DEFAULT nextval('tb_contato_id_seq'::regclass),
-	cont_tl_fixo character varying(10),
-	cont_tl_celular_primeiro character varying(10),
-	cont_tl_celular_segundo character varying(10),
+	cont_tl_fixo character varying(12),
+	cont_tl_celular_primeiro character varying(12),
+	cont_tl_celular_segundo character varying(12),
 	cont_ic_whatsapp_primeiro boolean,
 	cont_ic_whatsapp_segundo boolean,
 	cont_nm_email_skype character varying(200),
@@ -78,7 +78,7 @@ CREATE TABLE public.tb_contato (
 
 CREATE TABLE public.tb_rede_social (
 	rdso_id_social bigint NOT NULL DEFAULT nextval('tb_rede_social_id_seq'::regclass),
-	rdso_tp_tipo character varying(10),
+	rdso_tp_tipo character varying(15),
 	rdso_ur_link character varying(200),
 	rdso_id_afiliado bigint NOT NULL,
 	CONSTRAINT tb_rede_social_pkey PRIMARY KEY (rdso_id_social),

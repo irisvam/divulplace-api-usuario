@@ -19,7 +19,7 @@ public class RedeSocial {
 	@Column(name = "rdso_id_social")
 	private Long idSocial;
 
-	@Column(name = "rdso_tp_tipo", length = 10)
+	@Column(name = "rdso_tp_tipo", length = 15)
 	private String tpoSocial;
 
 	@Column(name = "rdso_ur_link", length = 200)

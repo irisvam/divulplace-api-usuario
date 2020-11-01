@@ -20,13 +20,13 @@ public class Contato {
 	@Column(name = "cont_id_contato")
 	private Long idContato;
 
-	@Column(name = "cont_tl_fixo", length = 10)
+	@Column(name = "cont_tl_fixo", length = 12)
 	private String telFixo;
 
-	@Column(name = "cont_tl_celular_primeiro", length = 10)
+	@Column(name = "cont_tl_celular_primeiro", length = 12)
 	private String celPrimeiro;
 
-	@Column(name = "cont_tl_celular_segundo", length = 10)
+	@Column(name = "cont_tl_celular_segundo", length = 12)
 	private String celSegundo;
 
 	@NotNull

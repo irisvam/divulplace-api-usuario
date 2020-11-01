@@ -8,6 +8,11 @@ import org.springframework.stereotype.Repository;
 import br.com.divulplace.usuario.entity.Role;
 import br.com.divulplace.usuario.util.enums.RoleName;
 
+/**
+ * Classe {@code Repository} para {@link Role}.
+ * 
+ * @see CrudRepository
+ */
 @Repository
 public interface RoleRepository extends CrudRepository<Role, Long> {
 
