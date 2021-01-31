@@ -81,11 +81,11 @@ public class EnderecoService {
 	}
 
 	/**
-	 * Método para cadastro do endereço do Afliado.
+	 * Método para cadastro do endereço do Afiliado.
 	 *
 	 * @param afiliado {@link Afiliado} com informações do Afiliado
 	 * @param userEndereco {@link UserEndereco} com as informações do endereço do Afiliado
-	 * @return {@code boolean} com {@code TRUE|FALSE} se cadastrado com sucesso
+	 * @return {@code RetornoCadastro} com o {@code ID} cadastrado com sucesso
 	 */
 	public RetornoCadastro cadastrarEndereco(final Afiliado afiliado, final UserEndereco userEndereco) {
 

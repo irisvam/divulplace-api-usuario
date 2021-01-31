@@ -50,7 +50,8 @@ public class ContatoService {
 			userContato.setCelular01WS(contato.isIcCelPriWhatsapp());
 			userContato.setCelular02(contato.getCelSegundo());
 			userContato.setCelular02WS(contato.isIcCelSegWhatsapp());
-			userContato.setSkype(contato.getDesSkype());		}
+			userContato.setSkype(contato.getDesSkype());
+		}
 
 		return userContato;
 	}
