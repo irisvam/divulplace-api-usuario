@@ -14,6 +14,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 @Entity
 @Table(name = "tb_portfolio_servico")
 public class PortfolioServico {
@@ -46,6 +49,7 @@ public class PortfolioServico {
 	@JoinTable(name = "tb_servico_ramo_atividade", 
 		joinColumns = @JoinColumn(name = "satv_id_servico", referencedColumnName = "psev_id_servico"), 
 		inverseJoinColumns = @JoinColumn(name = "satv_id_ramo_atividade", referencedColumnName = "ratv_id_ramo_atividade"))
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private Set<RamoAtividade> lstRamoAtividade;
 
 	public Long getIdServico() {

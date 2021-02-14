@@ -2,19 +2,8 @@ package br.com.divulplace.usuario.model;
 
 public class UserRamoAtividade {
 
-	private Long id;
 	private String nome;
 	private boolean situacao;
-
-	public Long getId() {
-
-		return id;
-	}
-
-	public void setId(final Long id) {
-
-		this.id = id;
-	}
 
 	public String getNome() {
 
