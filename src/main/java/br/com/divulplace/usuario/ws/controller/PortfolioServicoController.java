@@ -33,7 +33,7 @@ import br.com.divulplace.usuario.ws.service.PortfolioServicoService;
 @CrossOrigin(origins = "*")
 @RestController
 @Validated
-@RequestMapping("/portfolio/servico")
+@RequestMapping("/portfolio")
 public class PortfolioServicoController extends CommonController {
 
 	@Autowired
@@ -42,19 +42,19 @@ public class PortfolioServicoController extends CommonController {
 	@Autowired
 	private PortfolioServicoService serServico;
 
-	@GetMapping("/")
+	@GetMapping("/servicos")
 	public String init() {
 
 		return "Portfólio Serviço Controller.";
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<List<UserPortfolioServico>> recuperarPortfolioServico(@PathVariable(value = "id") final Long idAfiliado) {
+	@GetMapping("/{id}/servicos")
+	public ResponseEntity<List<UserPortfolioServico>> recuperarPortfolioServicos(@PathVariable(value = "id") final Long idAfiliado) {
 
 		return new ResponseEntity<List<UserPortfolioServico>>(this.serServico.encontrarListaPortfolioServicos(idAfiliado), HttpStatus.OK);
 	}
 
-	@PostMapping("/{id}")
+	@PostMapping("/{id}/servicos")
 	public ResponseEntity<RetornoCadastro> cadastrarPortfolioServico(@PathVariable(value = "id") final Long idUsuario,
 			@Valid @RequestBody final UserPortfolioServico userServico) {
 
@@ -77,11 +77,25 @@ public class PortfolioServicoController extends CommonController {
 		return new ResponseEntity<RetornoCadastro>(retorno, HttpStatus.OK);
 	}
 
-	@PutMapping("/{id}")
-	public ResponseEntity<?> atualizarPortfolioServico(@PathVariable(value = "id") final Long idService,
+	@GetMapping("/servicos/{id}")
+	public ResponseEntity<UserPortfolioServico> recuperarPortfolioServico(@PathVariable(value = "id") final Long idServico) {
+
+		final UserPortfolioServico userServico = this.serServico.encontrarServico(idServico);
+
+		if (null == userServico) {
+
+			throw new ParameterNotValidException(
+					super.getSourceMessage().getMessage(MessageProperties.GET_NOT_FOUND.getDescricao(), new Object[] {"serviço"}, super.getLocale()));
+		}
+
+		return new ResponseEntity<UserPortfolioServico>(userServico, HttpStatus.OK);
+	}
+
+	@PutMapping("/servicos/{id}")
+	public ResponseEntity<?> atualizarPortfolioServico(@PathVariable(value = "id") final Long idServico,
 			@Valid @RequestBody final UserPortfolioServico userServico) {
 
-		if (!this.serServico.atualizarPortfolioServico(idService, userServico)) {
+		if (!this.serServico.atualizarPortfolioServico(idServico, userServico)) {
 
 			throw new ParameterNotValidException(super.getSourceMessage().getMessage(MessageProperties.PUT_CONFLICT.getDescricao(),
 					new Object[] {"serviço do portfolio"}, super.getLocale()));
@@ -91,10 +105,10 @@ public class PortfolioServicoController extends CommonController {
 				new Object[] {"Serviço", "atualizado"}, super.getLocale())), HttpStatus.OK);
 	}
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<?> atualizarPortfolioServico(@PathVariable(value = "id") final Long idService) {
+	@DeleteMapping("/servicos/{id}")
+	public ResponseEntity<?> deletarPortfolioServico(@PathVariable(value = "id") final Long idServico) {
 
-		if (!this.serServico.deletarServico(idService)) {
+		if (!this.serServico.deletarServico(idServico)) {
 
 			throw new ParameterNotValidException(super.getSourceMessage().getMessage(MessageProperties.BAD_REQUEST.getDescricao(),
 					new Object[] {"Serviço", "não encontrado"}, super.getLocale()));

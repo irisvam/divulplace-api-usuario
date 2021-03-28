@@ -94,6 +94,26 @@ public class PortfolioServicoService {
 
 		return retorno;
 	}
+	
+	/**
+	 * Método para encontrar dados do Serviço desejado.
+	 *
+	 * @param idServico {@link Long} com o {@code ID} do serviço
+	 * @return {@link UserPortfolioServico} com as informações do Servico
+	 */
+	public UserPortfolioServico encontrarServico(final Long idServico) {
+
+		UserPortfolioServico userServico = null;
+
+		final PortfolioServico servico = this.repServico.findByIdServico(idServico).orElse(null);
+
+		if (null != servico) {
+
+			userServico = acrescentarServico(servico);
+		}
+
+		return userServico;
+	}
 
 	/**
 	 * Método para atualizar o Serviço de Portfólio do Afiliado.
