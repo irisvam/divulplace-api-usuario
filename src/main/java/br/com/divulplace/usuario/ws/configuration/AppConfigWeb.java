@@ -8,6 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -47,6 +48,15 @@ public class AppConfigWeb extends WebMvcConfigurationSupport {
 		messageSource.setDefaultEncoding("UTF-8");
 
 		return messageSource;
+	}
+
+	@Bean
+	public CommonsMultipartResolver multipartResolver() {
+
+		final CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+		multipartResolver.setMaxUploadSize(1000000000);
+
+		return multipartResolver;
 	}
 
 	@Override

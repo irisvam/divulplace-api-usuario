@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import br.com.divulplace.usuario.entity.Afiliado;
 import br.com.divulplace.usuario.model.ResponseMessage;
@@ -116,6 +118,21 @@ public class PortfolioServicoController extends CommonController {
 
 		return new ResponseEntity<>(new ResponseMessage(super.getSourceMessage().getMessage(MessageProperties.PUT_OK.getDescricao(),
 				new Object[] {"Serviço", "deletado"}, super.getLocale())), HttpStatus.OK);
+	}
+
+	@PostMapping("/servicos/{id}/imagens")
+	public ResponseEntity<?> adicionarImagensPortfolioServico(@PathVariable(value = "id") final Long idServico,
+			@RequestParam final MultipartFile[] files) {
+
+		System.out.println(files.length);
+
+		for (final MultipartFile image : files) {
+
+			System.out.println(image.getName());
+		}
+
+		return new ResponseEntity<>(new ResponseMessage(super.getSourceMessage().getMessage(MessageProperties.PUT_OK.getDescricao(),
+				new Object[] {"Imagens do Serviço", "atualizado"}, super.getLocale())), HttpStatus.OK);
 	}
 
 }
