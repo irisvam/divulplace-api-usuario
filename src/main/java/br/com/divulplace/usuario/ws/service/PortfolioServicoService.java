@@ -119,7 +119,7 @@ public class PortfolioServicoService {
 	 * Método para atualizar o Serviço de Portfólio do Afiliado.
 	 *
 	 * @param idService {@code ID} do Serviço a ser atualizado
-	 * @param userEndereco {@link UserPortfolioServico} com as informações do Serviço do Portfólio do Afiliado
+	 * @param userServico {@link UserPortfolioServico} com as informações do Serviço do Portfólio do Afiliado
 	 * @return {@code boolean} com {@code TRUE|FALSE} se atualizado com sucesso
 	 */
 	public boolean atualizarPortfolioServico(final Long idService, final UserPortfolioServico userServico) {
