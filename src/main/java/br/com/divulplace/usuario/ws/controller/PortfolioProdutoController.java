@@ -126,6 +126,7 @@ public class PortfolioProdutoController extends CommonController {
 
 		System.out.println(files.length);
 
+		
 		for (final MultipartFile image : files) {
 
 			System.out.println(image.getName());
