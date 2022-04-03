@@ -1,7 +1,5 @@
 package br.com.divulplace.usuario.ws.repositories;
 
-import java.util.Optional;
-
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +12,5 @@ import br.com.divulplace.usuario.entity.Contato;
  */
 @Repository
 public interface ContatoRepository extends CrudRepository<Contato, Long> {
-
-	Optional<Contato> findByAfiliadoIdAfiliado(Long id);
 
 }

@@ -2,12 +2,9 @@ package br.com.divulplace.usuario.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -45,10 +42,6 @@ public class Endereco {
 
 	@Column(name = "ende_nm_cidade", length = 100)
 	private String desCidade;
-
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ende_id_afiliado", referencedColumnName = "afld_id_afiliado")
-	private Afiliado afiliado;
 
 	public Long getIdEndereco() {
 
@@ -148,16 +141,6 @@ public class Endereco {
 	public void setDesCidade(final String desCidade) {
 	
 		this.desCidade = desCidade;
-	}
-
-	public Afiliado getAfiliado() {
-
-		return afiliado;
-	}
-
-	public void setAfiliado(final Afiliado afiliado) {
-
-		this.afiliado = afiliado;
 	}
 
 }

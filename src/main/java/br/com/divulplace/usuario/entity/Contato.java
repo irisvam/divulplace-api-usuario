@@ -2,12 +2,9 @@ package br.com.divulplace.usuario.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -39,10 +36,6 @@ public class Contato {
 
 	@Column(name = "cont_nm_email_skype", length = 200)
 	private String desSkype;
-
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "cont_id_afiliado", referencedColumnName = "afld_id_afiliado")
-	private Afiliado afiliado;
 
 	public Long getIdContato() {
 
@@ -112,16 +105,6 @@ public class Contato {
 	public void setDesSkype(final String desSkype) {
 
 		this.desSkype = desSkype;
-	}
-
-	public Afiliado getAfiliado() {
-
-		return afiliado;
-	}
-
-	public void setAfiliado(final Afiliado afiliado) {
-
-		this.afiliado = afiliado;
 	}
 
 }

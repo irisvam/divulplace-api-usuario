@@ -105,7 +105,7 @@ public class PortfolioServicoService {
 
 		UserPortfolioServico userServico = null;
 
-		final PortfolioServico servico = this.repServico.findByIdServico(idServico).orElse(null);
+		final PortfolioServico servico = this.repServico.findById(idServico).orElse(null);
 
 		if (null != servico) {
 

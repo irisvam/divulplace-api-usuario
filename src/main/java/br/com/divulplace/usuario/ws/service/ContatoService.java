@@ -14,6 +14,7 @@ import br.com.divulplace.usuario.model.RetornoCadastro;
 import br.com.divulplace.usuario.model.UserContato;
 import br.com.divulplace.usuario.model.UserRedeSocial;
 import br.com.divulplace.usuario.ws.repositories.ContatoRepository;
+import br.com.divulplace.usuario.ws.repositories.PerfilRepository;
 import br.com.divulplace.usuario.ws.repositories.RedeSocialRepository;
 
 /**
@@ -21,6 +22,9 @@ import br.com.divulplace.usuario.ws.repositories.RedeSocialRepository;
  */
 @Service
 public class ContatoService {
+
+	@Autowired
+	private PerfilRepository repPerfil;
 
 	@Autowired
 	private ContatoRepository repContato;
@@ -38,7 +42,9 @@ public class ContatoService {
 
 		UserContato userContato = null;
 
-		final Contato contato = this.repContato.findByAfiliadoIdAfiliado(idAfiliado).orElse(null);
+		final Afiliado afiliado = this.repPerfil.findById(idAfiliado).orElse(null);
+
+		final Contato contato = afiliado.getContato();
 
 		if (null != contato) {
 
@@ -153,11 +159,13 @@ public class ContatoService {
 	/**
 	 * Método para cadastro de novos conattos para o Afiliado.
 	 *
-	 * @param afiliado {@link Afiliado} com informações do Afiliado
+	 * @param idAfiliado {@link Long} com o {@code ID} do Afiliado
 	 * @param userContato {@link UserContato} com as informações dos contatos do Afiliado
 	 * @return {@code boolean} com {@code TRUE|FALSE} se cadastrado com sucesso
 	 */
-	public RetornoCadastro cadastrarContato(final Afiliado afiliado, final UserContato userContato) {
+	public RetornoCadastro cadastrarContato(final Long idAfiliado, final UserContato userContato) {
+
+		RetornoCadastro retorno = null;
 
 		final Contato contato = new Contato();
 		contato.setTelFixo(userContato.getTelefone());
@@ -167,12 +175,18 @@ public class ContatoService {
 		contato.setIcCelPriWhatsapp(userContato.isCelular02WS());
 		contato.setDesSkype(userContato.getSkype());
 
-		contato.setAfiliado(afiliado);
+		final Afiliado afiliado = this.repPerfil.findById(idAfiliado).orElse(null);
+		
+		if (null != afiliado) {
 
-		final Contato cadastrado = this.repContato.save(contato);
+			final Contato cadastrado = this.repContato.save(contato);
 
-		final RetornoCadastro retorno = new RetornoCadastro();
-		retorno.setId(cadastrado.getIdContato());
+			afiliado.setContato(contato);
+			this.repPerfil.save(afiliado);
+
+			retorno = new RetornoCadastro();
+			retorno.setId(cadastrado.getIdContato());	
+		}
 
 		return retorno;
 	}

@@ -60,9 +60,9 @@ public class ContatoController extends CommonController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<?> atualizarContato(@PathVariable(value = "id") final Long idUsuario, @Valid @RequestBody final UserContato userContato) {
+	public ResponseEntity<?> atualizarContato(@PathVariable(value = "id") final Long idAfiliado, @Valid @RequestBody final UserContato userContato) {
 
-		final Afiliado afiliado = this.repPerfil.findById(idUsuario).orElse(null);
+		final Afiliado afiliado = this.repPerfil.findById(idAfiliado).orElse(null);
 
 		if (null == afiliado) {
 
@@ -90,10 +90,10 @@ public class ContatoController extends CommonController {
 	}
 
 	@PostMapping("/{id}")
-	public ResponseEntity<RetornoCadastro> cadastrarContato(@PathVariable(value = "id") final Long idUsuario,
+	public ResponseEntity<RetornoCadastro> cadastrarContato(@PathVariable(value = "id") final Long idAfiliado,
 			@Valid @RequestBody final UserContato userContato) {
 
-		final Afiliado afiliado = this.repPerfil.findById(idUsuario).orElse(null);
+		final Afiliado afiliado = this.repPerfil.findById(idAfiliado).orElse(null);
 
 		if (null == afiliado) {
 
@@ -101,7 +101,7 @@ public class ContatoController extends CommonController {
 					new Object[] {"Afiliado", "não encontrado"}, super.getLocale()));
 		}
 
-		final RetornoCadastro retorno = this.serContato.cadastrarContato(afiliado, userContato);
+		final RetornoCadastro retorno = this.serContato.cadastrarContato(idAfiliado, userContato);
 
 		if (null == retorno) {
 

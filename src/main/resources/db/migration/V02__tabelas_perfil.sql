@@ -40,9 +40,15 @@ CREATE TABLE public.tb_afiliado
 	afld_ur_link character varying(200),
 	afld_nm_email character varying(200),
 	afld_id_usuario bigint NOT NULL,
+	afld_id_endereco bigint,
+	afld_id_contato bigint,
 	CONSTRAINT tb_afiliado_pkey PRIMARY KEY (afld_id_afiliado),
 	CONSTRAINT fk_tb_afiliado_x_tb_usuario_id FOREIGN KEY (afld_id_usuario)
-      REFERENCES public.tb_usuario (user_id_usuario) MATCH SIMPLE
+      REFERENCES public.tb_usuario (user_id_usuario) MATCH SIMPLE,
+    CONSTRAINT fk_tb_afiliado_x_tb_endereco_id FOREIGN KEY (afld_id_endereco)
+      REFERENCES public.tb_endereco (ende_id_endereco) MATCH SIMPLE,
+    CONSTRAINT fk_tb_afiliado_x_tb_contato_id FOREIGN KEY (afld_id_contato)
+      REFERENCES public.tb_contato (cont_id_contato) MATCH SIMPLE
 );
 
 CREATE TABLE public.tb_endereco (
@@ -57,9 +63,7 @@ CREATE TABLE public.tb_endereco (
 	ende_cd_cidade integer,
 	ende_nm_cidade character varying(100),
 	ende_id_afiliado bigint NOT NULL,
-	CONSTRAINT tb_endereco_pkey PRIMARY KEY (ende_id_endereco),
-	CONSTRAINT fk_tb_endereco_x_tb_afiliado_id FOREIGN KEY (ende_id_afiliado)
-      REFERENCES public.tb_afiliado (afld_id_afiliado) MATCH SIMPLE
+	CONSTRAINT tb_endereco_pkey PRIMARY KEY (ende_id_endereco)
 );
 
 CREATE TABLE public.tb_contato (
@@ -71,9 +75,7 @@ CREATE TABLE public.tb_contato (
 	cont_ic_whatsapp_segundo boolean,
 	cont_nm_email_skype character varying(200),
 	cont_id_afiliado bigint NOT NULL,
-	CONSTRAINT tb_contato_pkey PRIMARY KEY (cont_id_contato),
-	CONSTRAINT fk_tb_contato_x_tb_afiliado_id FOREIGN KEY (cont_id_afiliado)
-      REFERENCES public.tb_afiliado (afld_id_afiliado) MATCH SIMPLE
+	CONSTRAINT tb_contato_pkey PRIMARY KEY (cont_id_contato)
 );
 
 CREATE TABLE public.tb_rede_social (

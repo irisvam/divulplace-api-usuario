@@ -76,18 +76,10 @@ public class EnderecoController extends CommonController {
 	}
 
 	@PostMapping("/{id}")
-	public ResponseEntity<RetornoCadastro> cadastrarEndereco(@PathVariable(value = "id") final Long idUsuario,
+	public ResponseEntity<RetornoCadastro> cadastrarEndereco(@PathVariable(value = "id") final Long idAfiliado,
 			@Valid @RequestBody final UserEndereco userEndereco) {
 
-		final Afiliado afiliado = this.repPerfil.findById(idUsuario).orElse(null);
-
-		if (null == afiliado) {
-
-			throw new ParameterNotValidException(super.getSourceMessage().getMessage(MessageProperties.BAD_REQUEST.getDescricao(),
-					new Object[] {"Afiliado", "não encontrado"}, super.getLocale()));
-		}
-
-		final RetornoCadastro retorno = this.serEndereco.cadastrarEndereco(afiliado, userEndereco);
+		final RetornoCadastro retorno = this.serEndereco.cadastrarEndereco(idAfiliado, userEndereco);
 
 		if (null == retorno) {
 

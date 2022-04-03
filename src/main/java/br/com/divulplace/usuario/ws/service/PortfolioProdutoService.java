@@ -81,7 +81,7 @@ public class PortfolioProdutoService {
 
 		UserPortfolioProduto userProduto = null;
 
-		final PortfolioProduto produto = this.repProduto.findByIdProduto(idProduto).orElse(null);
+		final PortfolioProduto produto = this.repProduto.findById(idProduto).orElse(null);
 
 		if (null != produto) {
 

@@ -8,12 +8,16 @@ import br.com.divulplace.usuario.entity.Endereco;
 import br.com.divulplace.usuario.model.RetornoCadastro;
 import br.com.divulplace.usuario.model.UserEndereco;
 import br.com.divulplace.usuario.ws.repositories.EnderecoRepository;
+import br.com.divulplace.usuario.ws.repositories.PerfilRepository;
 
 /**
  * Classe {@code Service} para formatação de dados do Endereço do Afiliado.
  */
 @Service
 public class EnderecoService {
+
+	@Autowired
+	private PerfilRepository repPerfil;
 
 	@Autowired
 	private EnderecoRepository repEndereco;
@@ -28,7 +32,9 @@ public class EnderecoService {
 
 		UserEndereco userEndereco = null;
 
-		final Endereco endereco = this.repEndereco.findByAfiliadoIdAfiliado(idAfiliado).orElse(null);
+		final Afiliado afiliado = this.repPerfil.findById(idAfiliado).orElse(null);
+
+		final Endereco endereco = afiliado.getEndereco();
 
 		if (null != endereco) {
 
@@ -83,11 +89,13 @@ public class EnderecoService {
 	/**
 	 * Método para cadastro do endereço do Afiliado.
 	 *
-	 * @param afiliado {@link Afiliado} com informações do Afiliado
+	 * @param idAfiliado {@link Long} com o {@code ID} do Afiliado
 	 * @param userEndereco {@link UserEndereco} com as informações do endereço do Afiliado
 	 * @return {@code RetornoCadastro} com o {@code ID} cadastrado com sucesso
 	 */
-	public RetornoCadastro cadastrarEndereco(final Afiliado afiliado, final UserEndereco userEndereco) {
+	public RetornoCadastro cadastrarEndereco(final Long idAfiliado, final UserEndereco userEndereco) {
+
+		RetornoCadastro retorno = null;
 
 		final Endereco endereco = new Endereco();
 
@@ -100,12 +108,19 @@ public class EnderecoService {
 		endereco.setUfEstado(userEndereco.getEstado());
 		endereco.setCodCidade(null == userEndereco.getCidadeId() ? 0 : userEndereco.getCidadeId());
 		endereco.setDesCidade(userEndereco.getCidade());
-		endereco.setAfiliado(afiliado);
 
-		final Endereco cadastrado = this.repEndereco.save(endereco);
+		final Afiliado afiliado = this.repPerfil.findById(idAfiliado).orElse(null);
+		
+		if (null != afiliado) {
 
-		final RetornoCadastro retorno = new RetornoCadastro();
-		retorno.setId(cadastrado.getIdEndereco());
+			final Endereco cadastrado = this.repEndereco.save(endereco);
+
+			afiliado.setEndereco(endereco);
+			this.repPerfil.save(afiliado);
+
+			retorno = new RetornoCadastro();
+			retorno.setId(cadastrado.getIdEndereco());
+		}
 
 		return retorno;
 	}

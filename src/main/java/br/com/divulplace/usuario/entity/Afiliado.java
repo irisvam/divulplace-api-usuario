@@ -65,6 +65,14 @@ public class Afiliado {
 	@JoinColumn(name = "afld_id_usuario", referencedColumnName = "user_id_usuario")
 	private Usuario usuario;
 
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "afld_id_endereco", referencedColumnName = "ende_id_endereco")
+	private Endereco endereco;
+
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "afld_id_contato", referencedColumnName = "cont_id_contato")
+	private Contato contato;
+
 	public Long getIdAfiliado() {
 
 		return idAfiliado;
@@ -183,6 +191,26 @@ public class Afiliado {
 	public void setUsuario(final Usuario usuario) {
 
 		this.usuario = usuario;
+	}
+
+	public Endereco getEndereco() {
+
+		return endereco;
+	}
+
+	public void setEndereco(final Endereco endereco) {
+
+		this.endereco = endereco;
+	}
+
+	public Contato getContato() {
+
+		return contato;
+	}
+
+	public void setContato(final Contato contato) {
+
+		this.contato = contato;
 	}
 
 }

@@ -57,10 +57,10 @@ public class PortfolioProdutoController extends CommonController {
 	}
 
 	@PostMapping("/{id}/produtos")
-	public ResponseEntity<RetornoCadastro> cadastrarPortfolioServico(@PathVariable(value = "id") final Long idUsuario,
+	public ResponseEntity<RetornoCadastro> cadastrarPortfolioProduto(@PathVariable(value = "id") final Long idAfiliado,
 			@Valid @RequestBody final UserPortfolioProduto userProduto) {
 
-		final Afiliado afiliado = this.repPerfil.findById(idUsuario).orElse(null);
+		final Afiliado afiliado = this.repPerfil.findById(idAfiliado).orElse(null);
 
 		if (null == afiliado) {
 
@@ -87,7 +87,7 @@ public class PortfolioProdutoController extends CommonController {
 		if (null == userProduto) {
 
 			throw new ParameterNotValidException(
-					super.getSourceMessage().getMessage(MessageProperties.GET_NOT_FOUND.getDescricao(), new Object[] {"serviço"}, super.getLocale()));
+					super.getSourceMessage().getMessage(MessageProperties.GET_NOT_FOUND.getDescricao(), new Object[] {"produto"}, super.getLocale()));
 		}
 
 		return new ResponseEntity<UserPortfolioProduto>(userProduto, HttpStatus.OK);
@@ -126,7 +126,6 @@ public class PortfolioProdutoController extends CommonController {
 
 		System.out.println(files.length);
 
-		
 		for (final MultipartFile image : files) {
 
 			System.out.println(image.getName());
